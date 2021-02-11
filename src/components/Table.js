@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  useTable,
-  useFilters,
-  useSortBy,
-  useGroupBy,
-  useExpanded,
-  usePagination
-} from "react-table";
+import { useTable, useFilters, useSortBy } from "react-table";
 
 export default function Table({ columns, data }) {
   const [filterInput, setFilterInput] = useState("");
@@ -16,28 +9,13 @@ export default function Table({ columns, data }) {
     headerGroups,
     rows,
     setFilter,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize }
+    prepareRow
   } = useTable(
     {
       columns,
-      data,
-      initialState: { pageIndex: 2 }
+      data
     },
-    useFilters,
-    useGroupBy,
-    useSortBy,
-    useExpanded,
-    usePagination
+    useFilters
   );
   const handleFilterChange = (e) => {
     const value = e.target.value || undefined;
@@ -64,13 +42,7 @@ export default function Table({ columns, data }) {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.canGroupBy ? (
-                    // If the column can be grouped, let's add a toggle
-                    <span {...column.getGroupByToggleProps()}>
-                      {column.isGrouped ? "🛑 " : "👊 "}
-                    </span>
-                  ) : null}
+                <th {...column.getHeaderProps()}>
                   {column.render("Header")}
                   <span>
                     {column.isSorted
@@ -85,7 +57,7 @@ export default function Table({ columns, data }) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
+          {rows.map((row, i) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
