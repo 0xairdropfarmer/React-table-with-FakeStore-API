@@ -15,7 +15,7 @@ export default function Table({ columns, data }) {
       columns,
       data
     },
-    useFilters
+    useFilters,useSortBy
   );
   const handleFilterChange = (e) => {
     const value = e.target.value || undefined;
@@ -42,7 +42,7 @@ export default function Table({ columns, data }) {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
                   <span>
                     {column.isSorted
